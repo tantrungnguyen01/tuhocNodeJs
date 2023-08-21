@@ -1,0 +1,12 @@
+@import 'variables';
+.container{
+    color: $color;
+    text-align: center;
+   
+}
+.text_logo{
+    color: $text_logo !important;
+}
+.card-img-top{
+    height: $card-img-top;
+}
