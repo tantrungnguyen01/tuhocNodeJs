@@ -2,6 +2,7 @@ const Course=require('../models/Course');
 const { Multiple_mongoose_toObject_simple } = require('../../Utility/tools_mongoose');
 class NewsController{
 
+
       index(red,res,next){
          Course.find({})
                .then(course=>{
@@ -10,5 +11,6 @@ class NewsController{
                })
                .catch(next);
       }
+      
 }
 module.exports = new NewsController;
