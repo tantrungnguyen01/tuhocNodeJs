@@ -10,3 +10,14 @@
 .card-img-top{
     height: $card-img-top;
 }
+.footer{
+    background-color: $footer_color;
+}
+.user_admin{
+    width:$width_logo ;
+    height:$height_logo ;
+    border-radius: $borderRadius;
+}
+.dataTables_wrapper{
+    padding: $dataTables_wrapper;
+}

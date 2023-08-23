@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const handlebars = require('express-handlebars');
 const route= require('./routes');
 const db=require('./config/db');
+const methodOverride = require('method-override');//dùng để khi post lên update nó nhận là PUT theo quy chuẩn restfull api
+
 
 const app = express();
 const port = 3000;
@@ -18,10 +20,10 @@ db.connect();
 // 
 app.use(morgan('combined'));// là cái kiểm tra http có trả về hay không -> ::1 - - [19/Aug/2023:05:32:31 +0000] "GET /image/splatoon3_logo.png HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 app.use(express.static(path.join(__dirname,'public'))); // lấy hình
-app.engine('hbs', handlebars.engine({defaultLayout:'main', extname:'.hbs'})); // dùng để làm view 
-app.set('view engine', 'hbs'); // trà xuống view
+app.engine('hbs', handlebars.engine({ defaultLayout:'main', extname:'.hbs', helpers:{sum:(a,b)=>a+b, substring:(str,start,end)=>{const subStr=str.substring(start,end); return subStr+'...'}} })); // dùng để làm view và làm  2 cái helpers Anonymous functions
+app.set('view engine', 'hbs'); // trả xuống view
 app.set('views', path.join(__dirname, 'resources','views')); //trả xuống view
-
+app.use(methodOverride('_method'))//dùng để khi post lên update nó nhận là PUT theo quy chuẩn restfull api
 //Route
   route(app);
 //end Route

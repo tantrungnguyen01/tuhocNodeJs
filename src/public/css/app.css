@@ -1,0 +1,19 @@
+.container {
+  color: #843909; }
+
+.text_logo {
+  color: yellow !important; }
+
+.card-img-top {
+  height: 280px; }
+
+.footer {
+  background-color: black; }
+
+.user_admin {
+  width: 86px;
+  height: 50px;
+  border-radius: 50%; }
+
+.dataTables_wrapper {
+  padding: 40px; }

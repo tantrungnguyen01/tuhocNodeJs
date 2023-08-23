@@ -1,0 +1,23 @@
+<div class="mt-4">
+    <h2>Sửa data vào mongodb</h2>
+    <form method="POST" action="/courses/{{course._id}}?_method=PUT">
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" value="{{course.name}}" name="name" class="form-control" placeholder="nhập name vào">
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea  name="description" class="form-control" placeholder="nhập description vào" rows="4">{{course.description}}</textarea>
+        </div>
+        <div class="form-group">
+            <label>Thumbails</label>
+            <input type="text" value="{{course.thumbails}}" name="thumbails" class="form-control" placeholder="nhập hình vào">
+        </div>
+        <div class="form-group">
+            <label>VideoId</label>
+            <input type="text" value="{{course.videoId}}" name="videoId" class="form-control" placeholder="nhập videoId vào">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sửa</button>
+    </form>
+</div>
