@@ -1,0 +1,148 @@
+<form action="/courses/handle-form-actions-restore" name="container-form" method="POST">
+  <div class="mt-4">
+    <a href="/me/stored/courses/"><i class="fa-solid fa-circle-arrow-left fa-2xl"></i></a>
+      <div class="form-check d-flex align-items-center">
+        <div class="form-check-sm">
+          <input class="form-check-input" type="checkbox" value="" id="check-box-all">
+          <label class="form-check-label" for="check-box-all">All</label>
+        </div>
+        
+        <select class="custom-select-default m-3" name="actions" required="required">
+          <option value="" selected>--chọn đi--</option>
+          <option value="Restore">Restore</option>
+          <option value="Destroy">Destroy</option>
+        </select>
+
+        <button class="btn btn-primary btn-sm btn-dark check-all-submit-btn " disabled="disabled"  >Action</button>
+      </div>
+  </div>
+  <table class="table table-bordered " id="myTable">
+    <thead>
+      <tr>
+        <th scope="col">*</th>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Thumbails</th>
+        <th scope="col">Slug</th>
+        <th scope="col">VideoId</th>
+        <th scope="col">Thời gian xóa</th>
+        <th scope="col">Tùy chỉnh</th>
+        <th scope="col">Tùy chỉnh</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each MestoreCourses }}
+      <tr>
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="{{this._id}}" name="check_box[]">
+            </div>
+        </td>
+        <th scope="row">{{sum @index 1}}</th>
+        <td>{{this.name}}</td>
+        <td>{{substring this.description 0 19}}</td>
+        <td>{{substring this.thumbails 0 19}}</td>
+        <td>{{this.slug}}</td>
+        <td>{{this.videoId}}</td>
+        <td>{{this.updatedAt}}</td>
+        <td><a href="" class="btn btn-primary restore" data-id="{{this._id}}"><i class="fa-solid fa-rotate-left fa-xl"></i></a></td>
+        <td><a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-id="{{this._id}}"><i class="fa-solid fa-ban fa-xl"></i></a></td>
+      </tr>
+      {{/each }}
+    </tbody>
+    
+  </table>
+</form>
+{{!-- thông báo delete bootstrap 4 --}}
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">GoodBye</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Xóa Vĩnh Viễn ! Bạn Có Chắc Chưa ?
+      </div>
+      <div class="modal-footer">
+        <button id="btn-delete" type="button" class="btn btn-danger"><i class="fa-solid fa-ban fa-xl"></i></button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- dùng form để submit lên xóa  --}}
+<form method="POST" name="btn_form_delete"></form>
+{{!-- end --}}
+{{!-- dùng form để submit lên restore --}}
+<form method="POST" name="btn_form_restore"></form>
+{{!-- end --}}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+        var course;
+        var formdelete = document.forms['btn_form_delete'];
+        var formrestore = document.forms['btn_form_restore'];
+        var checkBoxRestore = $('#check-box-all');
+        var checkBoxRestoreObject = $('input[name="check_box[]"]');
+        var checkBtnEnable = $('.check-all-submit-btn');
+        
+        
+      $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+            course = button.data('id');
+      });
+
+      var BtnDelete=document.getElementById('btn-delete')
+          BtnDelete.onclick = function(){
+              formdelete.action = '/courses/'+ course +'/force?_method=DELETE';
+              formdelete.submit(); 
+          }
+
+
+      $('.restore').on('click',function(e){
+          e.preventDefault();
+          var restore_id =$(this).attr('data-id');
+            formrestore.action = '/courses/'+ restore_id +'/restore?_method=PATCH';
+            formrestore.submit();
+      });      
+            
+      checkBoxRestore.change(function(){
+        var checkTotalRestore=$(this).prop('checked');
+        checkBoxRestoreObject.prop('checked',checkTotalRestore);
+        renderSubmitBtn();
+      });
+
+      checkBoxRestoreObject.change(function(){
+        var checkTotalRestore = checkBoxRestoreObject.length === $('input[name="check_box[]"]:checked').length;
+        checkBoxRestore.prop('checked',checkTotalRestore);
+        renderSubmitBtn();
+      });
+
+      function renderSubmitBtn(){
+        var renderBtnEnable =$('input[name="check_box[]"]:checked').length;
+        if(renderBtnEnable > 0){
+          checkBtnEnable.attr('disabled',false);
+        }else{
+          checkBtnEnable.attr('disabled',true);
+        }
+      }
+
+      
+  });
+</script>
+{{!-- End thông báo delete bootstrap 4 --}}
+
+{{!-- var delete_form = document.forms['delete_form'];
+      var btndelete=document.getElementsByClassName("btn-delete");
+      for(var i = 0 ; i < btndelete.length ; i++){
+          btndelete[i].onclick = function(){
+            var course = this.getAttribute("data-id");
+            delete_form.action ='/courses/'+course+'?_method=DELETE';
+            delete_form.submit();
+          }  
+        }  cách xóa thông thường --}} 

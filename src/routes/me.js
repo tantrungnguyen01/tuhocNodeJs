@@ -4,8 +4,8 @@ const router = express.Router();
 
 const meController = require('../app/controllers/MeController');
 
-
-router.get('/', meController.me);
+router.get('/trash/courses',meController.trash)
+router.get('/stored/courses', meController.me);
 
 
 

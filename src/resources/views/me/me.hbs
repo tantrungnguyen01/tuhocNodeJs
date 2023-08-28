@@ -1,34 +1,62 @@
+<form action="/courses/handle-form-actions" name="container-form" method="POST">
+  <div class="mt-4 ">
+    <a href="/me/trash/courses/"><i class="fa-solid fa-trash fa-xl">  {{deletedCount}}</i></a>
 
-<table class="table table-bordered " id="myTable">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Description</th>
-      <th scope="col">Thumbails</th>
-      <th scope="col">Slug</th>
-      <th scope="col">VideoId</th>
-      <th scope="col">Tùy chỉnh</th>
-      <th scope="col">Tùy chỉnh</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each MestoreCourses }}
-    <tr>
-      <th scope="row">{{sum @index 1}}</th>
-      <td>{{this.name}}</td>
-      <td>{{substring this.description 0 19}}</td>
-      <td>{{substring this.thumbails 0 19}}</td>
-      <td>{{this.slug}}</td>
-      <td>{{this.videoId}}</td>
-      <td><a href="/courses/{{this._id}}/edit" class="btn btn-warning">Sửa</a></td>
-      <td><a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-id="{{this._id}}">Xóa</a></td>
-    </tr>
-  </tbody>
-  {{/each }}
-</table>
+    <div class="form-check d-flex align-items-center">
+      <div class="form-check-sm">
+        <input class="form-check-input" type="checkbox" value="" id="check-box-all">
+        <label class="form-check-label" for="check-box-all">All</label>
+      </div>
+      
+      <select class="custom-select-default m-3" name="actions" required="required">
+        <option value="" selected>--chọn đi--</option>
+        <option value="delete">Xóa</option>
+      </select>
+
+      <button class="btn btn-primary btn-sm btn-dark check-all-submit-btn " disabled="disabled" >Action</button>
+    </div>
+  </div>
+  <table class="table table-bordered " id="myTable">
+    <thead>
+      <tr>
+        <th scope="col">*</th>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Thumbails</th>
+        <th scope="col">Slug</th>
+        <th scope="col">VideoId</th>
+        <th scope="col">Thời gian tạo</th>
+        <th scope="col">Tùy chỉnh</th>
+        <th scope="col">Tùy chỉnh</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each MestoreCourses }}
+      <tr>
+        <td>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="{{this._id}}" name="check_box[]">
+          </div>
+        </td>
+        <th scope="row">{{sum @index 1}}</th>
+        <td>{{this.name}}</td>
+        <td>{{substring this.description 0 19}}</td>
+        <td>{{substring this.thumbails 0 19}}</td>
+        <td>{{this.slug}}</td>
+        <td>{{this.videoId}}</td>
+        <td>{{this.createdAt}}</td>
+        <td><a href="/courses/{{this._id}}/edit" class="btn btn-warning">Sửa</a></td>
+        <td><a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-id="{{this._id}}">Xóa</a></td>
+      </tr>
+      {{/each }}
+    </tbody>
+
+  </table>
+</form>
 {{!-- thông báo delete bootstrap 4 --}}
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -38,31 +66,91 @@
         </button>
       </div>
       <div class="modal-body">
-       Bạn Có Chắc Chắn Muốn Xóa Hay Không ?
+        Bạn Có Chắc Chắn Muốn Xóa Hay Không ?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger">Xóa Bỏ</button>
+        <button id="btn-delete" type="button" class="btn btn-danger">Xóa Bỏ</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
       </div>
     </div>
   </div>
 </div>
+
+{{!-- dùng form để submit lên xóa  --}}
+<form method="POST" name="btn_form_delete"></form>   
 <script>
-    //document.addEventListener('DOMContentLoaded',function(){}); khi nào mà bị lỗi thư viện jquery thì dùng nó vào 
-    $('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var id = button.data('id') // Extract info from data-* attributes
-    })
+  document.addEventListener('DOMContentLoaded', function () {
+        var course;
+        var formdelete = document.forms['btn_form_delete'];
+        var checkboxAll = $('#check-box-all');
+        var checkboxObject = $('input[name="check_box[]"]');
+        var checkAllSubmitBtn = $('.check-all-submit-btn');
+        var containerForm=$('form[name="container-form"]');
+      $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+            course = button.data('id');
+      });
+
+        var BtnDelete=document.getElementById('btn-delete')
+            BtnDelete.onclick = function(){
+              formdelete.action = '/courses/'+ course +'?_method=DELETE';
+              formdelete.submit(); 
+            }
+
+        checkboxAll.change(function(){
+          //console.log($(this).prop('checked'));
+
+          //  var checked_total = $(this).prop('checked');
+          //  if(checked_total){
+          //    checkboxObject.prop('checked',true);
+          //  }else{
+          //    checkboxObject.prop('checked',false);
+          //  }   vì bản chất checked_total nó đã trả về boolen(true hoặc false) nên ta se làm cách dưới đây
+            var checked_total = $(this).prop('checked');
+                checkboxObject.prop('checked',checked_total);
+        renderCheckAllBtn();         
+        });
+        //làm cho khi check vào 1 trong những checkboxObeject  thì checked_total phải bỏ ra check
+        checkboxObject.change(function(){
+            var checked_total = checkboxObject.length === $('input[name="check_box[]"]:checked').length;
+                checkboxAll.prop('checked',checked_total);
+        renderCheckAllBtn();         
+        })    
+
+        //làm cho btn khi mà disabled thì không được submit| làm cách nào để check khi nào nó có quyền submit  ->cách làm là dựa theo class disable khi mà nó có quyền submit thì có class disabled và ngược lại 
+        //containerForm.on('submit',function(e){
+        //    var isSubmittable = !checkAllSubmitBtn.hasClass('disabled')//trong đoạn này đang nói nếu mà không có disabled  //jquery hỗ hợ phương thức hasClass là nếu mà có class thì trả về  true và ngược lại là false
+        //    if(!isSubmittable){
+        //      e.preventDefault();
+        //    }   
+        //});
+       
+
+        //làm cho khi mà check vào ô bất kỳ nó sẽ enable cái nút button lên --> dùng 1 cái form  và button là type submit
+        function renderCheckAllBtn(){
+           var checkedCount = $('input[name="check_box[]"]:checked').length;
+          // console.log(checkedCount);  kiểm tra xem số lượng + lại có đúng không
+           if(checkedCount > 0){
+              checkAllSubmitBtn.attr('disabled',false);
+           }else{
+              checkAllSubmitBtn.attr('disabled',true);
+           }
+        }
+
+        
+        
+              
+     
+  });
 </script>
 {{!-- End thông báo delete bootstrap 4 --}}
-  
-  
-  
 
-   
-
-  
- 
-
-
-
+{{!-- var delete_form = document.forms['delete_form'];
+      var btndelete=document.getElementsByClassName("btn-delete");
+      for(var i = 0 ; i < btndelete.length ; i++){
+          btndelete[i].onclick = function(){
+            var course = this.getAttribute("data-id");
+            delete_form.action ='/courses/'+course+'?_method=DELETE';
+            delete_form.submit();
+          }  
+        }  cách xóa thông thường --}} 

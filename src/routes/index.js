@@ -2,10 +2,14 @@ const newRouter = require('./news');
 const siteRouter = require('./site');
 const courseRouter = require('./courses');
 const meRouter = require('./me');
+const loginRouter = require('./login');
+
 
 function route(app) {
-
-    app.use('/me/stored/courses',meRouter);
+    
+    app.use('/index',loginRouter);
+   
+    app.use('/me',meRouter);
 
     app.use('/tintuc',newRouter);
 

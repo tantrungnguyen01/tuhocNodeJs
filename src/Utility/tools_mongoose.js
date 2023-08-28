@@ -14,7 +14,7 @@
 // };
 
 
-// *****|làm theo kẻo rút gọn code optimize code|*****
+// *****|làm theo cách rút gọn code optimize code|*****
 module.exports = {
     Multiple_mongoose_toObject_simple : function (mongooseArray) {
         return mongooseArray.map(mongoose => mongoose.toObject());   

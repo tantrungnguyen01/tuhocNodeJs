@@ -6,6 +6,11 @@ const route= require('./routes');
 const db=require('./config/db');
 const methodOverride = require('method-override');//dùng để khi post lên update nó nhận là PUT theo quy chuẩn restfull api
 
+const session = require('express-session');//thư viện session tạo phiên id dùng cho middleware express js 
+
+
+const ExpressMiddlewares = require('./app/middlewares/ExpressMidd.js'); // áp dụng middleware
+
 
 const app = express();
 const port = 3000;
@@ -24,9 +29,22 @@ app.engine('hbs', handlebars.engine({ defaultLayout:'main', extname:'.hbs', help
 app.set('view engine', 'hbs'); // trả xuống view
 app.set('views', path.join(__dirname, 'resources','views')); //trả xuống view
 app.use(methodOverride('_method'))//dùng để khi post lên update nó nhận là PUT theo quy chuẩn restfull api
+
+//session 
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
+
+app.use(ExpressMiddlewares);//sử dụng middlewarelogin
 //Route
   route(app);
 //end Route
+
+
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
