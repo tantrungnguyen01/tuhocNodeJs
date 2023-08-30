@@ -21,3 +21,8 @@
 .dataTables_wrapper{
     margin: $dataTables_wrapper;
 }
+.msg_error{
+    background: $background_msg_error;
+    width: $width_msg_error;
+    margin-top: $margin_msg_error;
+}

@@ -17,3 +17,8 @@
 
 .dataTables_wrapper {
   margin: 10px 0; }
+
+.msg_error {
+  background: black;
+  width: 30%;
+  margin-top: 4px; }

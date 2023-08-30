@@ -15,7 +15,9 @@ class LoginController {
                 req.session.token = user;
                 res.redirect('/tintuc')
             }else{
-                res.send('mật khẩu không đúng');
+                // res.send('mật khẩu không đúng');
+                req.session.error = 'Sai Tài Khoản Hoặc Mật Khẩu';
+                res.redirect('back');
             }
         } catch (error) {
             res.status(500)
@@ -28,11 +30,13 @@ class LoginController {
         try {
             const data = await Login.findOne({ email: req.body.email });
             if (data) {
-                res.status(200).send('user đã tồn tại')
+                // res.status(400).send('user đã tồn tại')
+                req.session.error = 'User Này Đã Tồn Tại';
+                res.redirect('back');
             } else {
                 const login = new Login(req.body);
                 await login.save();
-                res.send('Đăng kí Thành Công');
+                res.redirect('index/login');
             }
         } catch (error) {
             next(error)
