@@ -9,7 +9,7 @@ const methodOverride = require('method-override');//dùng để khi post lên up
 const session = require('express-session');//thư viện session tạo phiên id dùng cho middleware express js 
 
 
-const ExpressMiddlewares = require('./app/middlewares/ExpressMidd.js'); // áp dụng middleware
+//const ExpressMiddlewares = require('./app/middlewares/ExpressMidd'); // không  áp dụng middleware trong này vì nó mapping route ra vòng lặp vô tận
 
 
 const app = express();
@@ -23,23 +23,22 @@ app.use(express.json());//middleware dùng cho các thư viện của javascript
 //kết nối với database mongodb
 db.connect();
 // 
-app.use(morgan('combined'));// là cái kiểm tra http có trả về hay không -> ::1 - - [19/Aug/2023:05:32:31 +0000] "GET /image/splatoon3_logo.png HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+//app.use(morgan('combined'));// là cái kiểm tra http có trả về hay không -> ::1 - - [19/Aug/2023:05:32:31 +0000] "GET /image/splatoon3_logo.png HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 app.use(express.static(path.join(__dirname,'public'))); // lấy hình
 app.engine('hbs', handlebars.engine({ defaultLayout:'main', extname:'.hbs', helpers:{sum:(a,b)=>a+b, substring:(str,start,end)=>{const subStr=str.substring(start,end); return subStr+'...'}} })); // dùng để làm view và làm  2 cái helpers Anonymous functions
 app.set('view engine', 'hbs'); // trả xuống view
 app.set('views', path.join(__dirname, 'resources','views')); //trả xuống view
 app.use(methodOverride('_method'))//dùng để khi post lên update nó nhận là PUT theo quy chuẩn restfull api
 
-//session 
-app.set('trust proxy', 1) // trust first proxy
+//session
 app.use(session({
-  secret: 'keyboard cat',
+  secret: 'shhhh, very secret',
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
+  saveUninitialized: false,
 }))
 
-app.use(ExpressMiddlewares);//sử dụng middlewarelogin
+//app.use(ExpressMiddlewares);// không sử dụng middlewarelogin use trong này vì nó mapping ra route vòng lặp vô tận 
+
 //Route
   route(app);
 //end Route

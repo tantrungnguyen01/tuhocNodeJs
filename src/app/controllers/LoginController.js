@@ -1,5 +1,6 @@
 const Login = require('../models/Login');
 const bcrypt = require('bcrypt');
+
 class LoginController {
 
     async postLogin(req, res, next) {
@@ -11,12 +12,13 @@ class LoginController {
             }
             const math = await bcrypt.compare(req.body.password,user.password);
             if (math) {
-                res.send('đăng nhập thành công')
+                req.session.token = user;
+                res.redirect('/tintuc')
             }else{
-                res.redirect('back');
+                res.send('mật khẩu không đúng');
             }
         } catch (error) {
-            next(error)
+            res.status(500)
         }
 
     }
@@ -30,7 +32,7 @@ class LoginController {
             } else {
                 const login = new Login(req.body);
                 await login.save();
-                res.json(login);
+                res.send('Đăng kí Thành Công');
             }
         } catch (error) {
             next(error)
