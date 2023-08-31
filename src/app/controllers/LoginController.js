@@ -36,7 +36,8 @@ class LoginController {
             } else {
                 const login = new Login(req.body);
                 await login.save();
-                res.redirect('index/login');
+                req.session.success='Đăng ký Tài KHoản Thành Công';
+                res.redirect('back');
             }
         } catch (error) {
             next(error)

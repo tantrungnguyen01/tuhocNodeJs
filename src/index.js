@@ -10,6 +10,7 @@ const session = require('express-session');//thư viện session tạo phiên id
 
 
 //const ExpressMiddlewares = require('./app/middlewares/ExpressMidd'); // không  áp dụng middleware trong này vì nó mapping route ra vòng lặp vô tận
+const SessionMiddleswares = require('./app/middlewares/sessionMiddlesware'); // import middlewawre vào cho nó app.use ở dưới lấy tên 
 
 
 const app = express();
@@ -23,16 +24,14 @@ app.use(express.json());//middleware dùng cho các thư viện của javascript
 //kết nối với database mongodb
 db.connect();
 // 
-//app.use(morgan('combined'));// là cái kiểm tra http có trả về hay không -> ::1 - - [19/Aug/2023:05:32:31 +0000] "GET /image/splatoon3_logo.png HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+app.use(morgan('combined'));// là cái kiểm tra http có trả về hay không -> ::1 - - [19/Aug/2023:05:32:31 +0000] "GET /image/splatoon3_logo.png HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 app.use(express.static(path.join(__dirname,'public'))); // lấy hình
 
 
-app.engine('hbs', handlebars.engine({
-                                     defaultLayout:'main', extname:'.hbs',
-                                     helpers:{sum:(a,b)=>a+b,
-                                      substring:(str,start,end)=>{const subStr=str.substring(start,end); return subStr+'...'}},
+app.engine('hbs', handlebars.engine({ defaultLayout:'main', extname:'.hbs',
+                                      helpers: require('./helpers/handlebars'),
                                     })
-            ); // dùng để làm view và làm  2 cái helpers Anonymous functions
+            );//cắt helpers ra làm 1 file riêng ---- // dùng để làm view và làm  2 cái helpers Anonymous functions
 
 
 app.set('view engine', 'hbs'); // trả xuống view
@@ -45,18 +44,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }))
-//dùng để tạo thông báo vào handlesbar phải dùng locals
-app.use(function(req, res, next){
-  var err = req.session.error;
-  var msg = req.session.success;
-  delete req.session.error;
-  delete req.session.success;
-  res.locals.message = '';
-  if (err) res.locals.message = '<p class="msg_error">' + err + '</p>';
-  if (msg) res.locals.message = '<p class="msg_success">' + msg + '</p>';
-  next();
-});
+app.use(SessionMiddleswares);//dùng để tạo thông báo vào handlesbar phải dùng locals
 //end session
+
 
 //app.use(ExpressMiddlewares);// không sử dụng middlewarelogin use trong này vì nó mapping ra route vòng lặp vô tận 
 
