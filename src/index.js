@@ -9,6 +9,8 @@ const methodOverride = require('method-override');//dùng để khi post lên up
 const session = require('express-session');//thư viện session tạo phiên id dùng cho middleware express.js 
 
 
+
+
 //const ExpressMiddlewares = require('./app/middlewares/ExpressMidd'); // không  áp dụng middleware trong này vì nó mapping route ra vòng lặp vô tận
 const SessionMiddleswares = require('./app/middlewares/sessionMiddlesware'); // import middlewawre vào cho nó app.use ở dưới lấy tên 
 

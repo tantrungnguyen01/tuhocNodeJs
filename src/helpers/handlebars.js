@@ -4,6 +4,7 @@ module.exports = {
     substring: (str, start, end) => {
         const subStr = str.substring(start, end);
         return subStr + '...'
-    }
+    },
+    
 
 }

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const loginController = require('../app/controllers/LoginController');
 
-
+router.get('/logout',loginController.logout)
 router.post('/postLogin',loginController.postLogin)
 router.get('/login',loginController.login)
 router.post('/register',loginController.register);

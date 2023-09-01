@@ -16,7 +16,10 @@
             {{>header}}    
                
                 <div class="container">
-                     {{{message}}}
+                    {{#each message}}
+                        <p class="msg_error">{{this}}</p>
+                    {{/each}}
+                     
 
                     {{{body}}}
                     

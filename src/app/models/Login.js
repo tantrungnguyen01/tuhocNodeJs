@@ -5,8 +5,8 @@ const bcrypt = require('bcrypt');
 
 
 const Login = new Schema({
-    email: { type: String, default: 'hahaha' },
-    password: { type: String },
+    email: { type: String, default: 'hahaha',required:true },
+    password: { type: String  },
     age: { type: String, default: '18' },
     role:{ type: String ,default:'USER',unique:false},
     slug: { type: String, slug: 'email', unique: true },
