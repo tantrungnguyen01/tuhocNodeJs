@@ -12,7 +12,7 @@ router.patch('/:_id/restore',courseController.restore);//theo chuẩn restfull a
 router.put('/:_id',courseController.update);//theo chuẩn restfull api nên dùng put thông thường thì post
 router.delete('/:_id/force',courseController.destroy);//xóa thiệt luôn
 router.delete('/:_id',courseController.delete);
-router.get('/:slug', courseController.show);
+// router.get('/:slug', courseController.show);
 
 
 

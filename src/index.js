@@ -6,7 +6,7 @@ const route= require('./routes');
 const db=require('./config/db');
 const methodOverride = require('method-override');//dùng để khi post lên update nó nhận là PUT theo quy chuẩn restfull api
 
-const session = require('express-session');//thư viện session tạo phiên id dùng cho middleware express js 
+const session = require('express-session');//thư viện session tạo phiên id dùng cho middleware express.js 
 
 
 //const ExpressMiddlewares = require('./app/middlewares/ExpressMidd'); // không  áp dụng middleware trong này vì nó mapping route ra vòng lặp vô tận
@@ -24,7 +24,7 @@ app.use(express.json());//middleware dùng cho các thư viện của javascript
 //kết nối với database mongodb
 db.connect();
 // 
-app.use(morgan('combined'));// là cái kiểm tra http có trả về hay không -> ::1 - - [19/Aug/2023:05:32:31 +0000] "GET /image/splatoon3_logo.png HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+//app.use(morgan('combined'));// là cái kiểm tra http có trả về hay không -> ::1 - - [19/Aug/2023:05:32:31 +0000] "GET /image/splatoon3_logo.png HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 app.use(express.static(path.join(__dirname,'public'))); // lấy hình
 
 
@@ -43,8 +43,11 @@ app.use(session({
   secret: 'shhhh, very secret',
   resave: false,
   saveUninitialized: false,
-}))
-app.use(SessionMiddleswares);//dùng để tạo thông báo vào handlesbar phải dùng locals
+  cookie:{
+  //  maxAge:30000  //là 30 giây thời hạn cookie 
+  }
+}));
+app.use(SessionMiddleswares);
 //end session
 
 

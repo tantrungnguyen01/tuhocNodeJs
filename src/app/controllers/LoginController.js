@@ -8,6 +8,7 @@ class LoginController {
         try {
             const user = await Login.findOne({email:req.body.email})
             if (!user) {
+                req.session.error = 'Tài khoản Hoặc Mật Khẩu Không Tồn Tại';
                 res.redirect('back');
             }
             const math = await bcrypt.compare(req.body.password,user.password);
@@ -45,6 +46,7 @@ class LoginController {
     }
 
     login(req, res, next) {
+    
         res.render('login')
     }
 

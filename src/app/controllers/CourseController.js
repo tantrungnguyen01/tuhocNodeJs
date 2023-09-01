@@ -80,11 +80,11 @@ class CourseController {
       create(req, res, next) {
             res.render('courses/create');
       }
-      // course/:slug
-      show(req, res, next) {
-            Course.findOne({ slug: req.params.slug })
-                  .then(key => {res.render('courses/show', { course: mongoose_toObject_simple_single(key) })})
-                  .catch(next)
-      }
+      // // course/:slug
+      // show(req, res, next) {
+      //       Course.findOne({ slug: req.params.slug })
+      //             .then(key => {res.render('courses/show', { course: mongoose_toObject_simple_single(key) })})
+      //             .catch(next)
+      // }
 }
 module.exports = new CourseController;

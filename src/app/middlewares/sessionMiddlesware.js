@@ -1,3 +1,4 @@
+//dùng để tạo thông báo vào handlesbar phải dùng locals
 module.exports = function (req, res, next) {
 
     var err = req.session.error;

@@ -3,19 +3,19 @@ const siteRouter = require('./site');
 const courseRouter = require('./courses');
 const meRouter = require('./me');
 const loginRouter = require('./login');
-const ExpressMiddleware = require('../app/middlewares/ExpressMidd');
+const {expressMiddleware,permissionAll,permissionAdmin} = require('../app/middlewares/ExpressMidd')
 
 function route(app) {
    
     app.use('/index',loginRouter);
    
-    app.use('/me',ExpressMiddleware,meRouter);
+    app.use('/me',expressMiddleware,permissionAdmin,meRouter);
 
-    app.use('/tintuc',ExpressMiddleware,newRouter);
+    app.use('/tintuc',expressMiddleware,permissionAll,newRouter);
 
-    app.use('/courses',ExpressMiddleware,courseRouter);
+    app.use('/courses',expressMiddleware,permissionAdmin,courseRouter);
 
-    app.use('/',ExpressMiddleware,siteRouter);
+    app.use('/',expressMiddleware,siteRouter);
 
     // app.get('/', (req, res) => {
     //     res.render('home');
