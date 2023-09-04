@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname,'public'))); // lấy hình
 app.engine('hbs', handlebars.engine({ defaultLayout:'main', extname:'.hbs',
                                       helpers: require('./helpers/handlebars'),
                                     })
-            );//cắt helpers ra làm 1 file riêng ---- // dùng để làm view và làm  2 cái helpers Anonymous functions
+            );//cắt helpers ra làm 1 file riêng
 
 
 app.set('view engine', 'hbs'); // trả xuống view
@@ -46,7 +46,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie:{
-  //  maxAge:30000  //là 30 giây thời hạn cookie 
+  //  maxAge:30000  //là 30 giây thời hạn sống cookie 
   }
 }));
 app.use(SessionMiddleswares);
